@@ -94,7 +94,7 @@ export const landingPages = sqliteTable("landing_pages", {
   licenseId: text("license_id")
     .primaryKey()
     .references(() => licenses.licenseId),
-  service: text("service").notNull().default("Microsoft 365"),
+  service: text("service").notNull(),
   domainId: integer("domain_id"),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });

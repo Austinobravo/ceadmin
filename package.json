@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "seed": "tsx lib/seed.ts"
+    "seed": "tsx lib/seed.ts",
+    "reset": "tsx lib/reset.ts"
   },
   "dependencies": {
     "@types/better-sqlite3": "^7.6.13",

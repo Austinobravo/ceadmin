@@ -34,7 +34,7 @@ export async function loginLicense(
   }
 
   await createSession(license.licenseId);
-  redirect("/overview");
+  redirect(`/${license.licenseId}/overview`);
 }
 
 export async function setupLicense(
@@ -63,5 +63,6 @@ export async function setupLicense(
     .where(eq(licenses.licenseId, license.licenseId));
 
   await createSession(license.licenseId);
-  redirect("/overview");
+  redirect(`/${license.licenseId}/overview`);
+
 }

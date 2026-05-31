@@ -43,16 +43,16 @@ export async function saveTelegram(_state: ActionState, formData: FormData): Pro
 export async function saveLandingPage(_state: ActionState, formData: FormData): Promise<ActionState> {
   const session = await requireSession();
   const parsed = z
-    .object({ service: z.enum(services), domainId: z.coerce.number().int().positive() })
-    .safeParse({ service: formData.get("service"), domainId: formData.get("domainId") });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Choose a service and domain." };
+    .object({ url: z.url() })
+    .safeParse({ url: formData.get("url") });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid landing page URL." };
 
   await db
     .insert(landingPages)
-    .values({ licenseId: session.licenseId, ...parsed.data, updatedAt: new Date().toISOString() })
+    .values({ licenseId: session.licenseId, service: parsed.data.url, updatedAt: new Date().toISOString() })
     .onConflictDoUpdate({
       target: landingPages.licenseId,
-      set: { ...parsed.data, updatedAt: new Date().toISOString() },
+      set: { service: parsed.data.url, updatedAt: new Date().toISOString() },
     });
   revalidatePath("/link-management/landing-page");
   return { success: "Landing page saved." };

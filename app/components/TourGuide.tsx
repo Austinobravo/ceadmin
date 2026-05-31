@@ -8,20 +8,28 @@ type Step = {
   body: string;
 };
 
-const tourVersion = "2026-05-dashboard-link-management";
+const tourVersion = "2026-05-31-support-pagination-data-tour";
 
 const steps: Step[] = [
   {
-    title: "Overview",
-    body: "Start with license status, expiry countdown, and current database totals.",
+    title: "What CE Admin Does",
+    body: "CE Admin helps you manage a license-scoped dashboard for captured log data, proxy routing, domain records, link behavior, notification settings, and security activity.",
   },
   {
-    title: "Management links",
-    body: "Proxy, domain, and link settings now save through authenticated server actions.",
+    title: "Where Data Is Saved",
+    body: "Dashboard settings and records are saved in the database through authenticated server actions. Proxies and domains are configured to route through your dashboard server, which can be self-hosted or run on our managed infrastructure.",
   },
   {
-    title: "Long tables",
-    body: "Dense rows are shortened for scanning. Use row actions and detail dialogs for full payloads.",
+    title: "Overview Table",
+    body: "The overview table is paginated for long log datasets. Use search to filter, the eye button for full details, download for log JSON, and delete only after confirming.",
+  },
+  {
+    title: "Management Areas",
+    body: "Use Proxy Management, Domain Management, and Link Management to control routing, landing pages, Telegram notifications, captcha, and single-link behavior.",
+  },
+  {
+    title: "Support",
+    body: "The Support section lists contact channels for license access, configuration help, and operational questions. Never share your password in support messages.",
   },
 ];
 

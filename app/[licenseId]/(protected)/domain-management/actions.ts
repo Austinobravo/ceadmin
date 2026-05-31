@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireSession } from "@/lib/auth";
 import { domains } from "@/lib/schema/main.schema";
+import { and, eq } from "drizzle-orm";
 
 export type ActionState = { error?: string; success?: string };
 
@@ -26,7 +27,21 @@ export async function addDomain(_state: ActionState, formData: FormData): Promis
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid domain." };
 
   await db.insert(domains).values({ licenseId: session.licenseId, ...parsed.data });
-  revalidatePath("/domain-management/add-domain");
-  revalidatePath("/overview");
+  revalidatePath(`/${session.licenseId}/domain-management/add-domain`);
+  revalidatePath(`/${session.licenseId}/overview`);
   return { success: "Domain added." };
+}
+
+export async function deleteDomain(id: number): Promise<ActionState> {
+  const session = await requireSession();
+  const parsed = z.coerce.number().int().positive().safeParse(id);
+  if (!parsed.success) return { error: "Invalid domain id." };
+
+  await db
+    .delete(domains)
+    .where(and(eq(domains.id, parsed.data), eq(domains.licenseId, session.licenseId)));
+
+  revalidatePath(`/${session.licenseId}/domain-management/add-domain`);
+  revalidatePath(`/${session.licenseId}/overview`);
+  return { success: "Domain deleted." };
 }

@@ -25,9 +25,11 @@ export function ProxySettingsForm({
         <label className="text-sm font-medium text-[var(--text)]">
           Rotation Method
           <select name="rotationMethod" defaultValue={initialData.rotationMethod} className="form-input">
-            <option value="sticky">Sticky Session</option>
+            {/* <option value="sticky">Sticky Session</option>
             <option value="per-request">Per Request</option>
-            <option value="interval">Timed Interval</option>
+            <option value="interval">Timed Interval</option> */}
+            <option value="sequential">Sequential</option> 
+            <option value="random">Random</option> 
           </select>
         </label>
       </div>

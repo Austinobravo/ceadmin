@@ -129,6 +129,11 @@ export async function requireSession() {
   return session;
 }
 
+export async function getLastLicenseId() {
+  const cookieStore = await cookies();
+  return cookieStore.get(LAST_LICENSE_COOKIE)?.value ?? null;
+}
+
 export async function requireRouteSession() {
   const session = await getSession();
   if (!session) {

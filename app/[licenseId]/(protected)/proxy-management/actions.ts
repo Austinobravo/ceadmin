@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireSession } from "@/lib/auth";
 import { proxies, proxySettings } from "@/lib/schema/main.schema";
+import { and, eq } from "drizzle-orm";
 
 export type ActionState = { error?: string; success?: string };
 
@@ -42,7 +43,7 @@ export async function saveProxySettings(_state: ActionState, formData: FormData)
       set: { ...parsed.data, updatedAt: new Date().toISOString() },
     });
 
-  revalidatePath("/proxy-management/settings");
+  revalidatePath(`/${session.licenseId}/proxy-management/settings`);
   return { success: "Proxy settings saved." };
 }
 
@@ -58,7 +59,21 @@ export async function addProxy(_state: ActionState, formData: FormData): Promise
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid proxy." };
 
   await db.insert(proxies).values({ licenseId: session.licenseId, ...parsed.data });
-  revalidatePath("/proxy-management/add-proxy");
-  revalidatePath("/overview");
+  revalidatePath(`/${session.licenseId}/proxy-management/add-proxy`);
+  revalidatePath(`/${session.licenseId}/overview`);
   return { success: "Proxy added." };
+}
+
+export async function deleteProxy(id: number): Promise<ActionState> {
+  const session = await requireSession();
+  const parsed = z.coerce.number().int().positive().safeParse(id);
+  if (!parsed.success) return { error: "Invalid proxy id." };
+
+  await db
+    .delete(proxies)
+    .where(and(eq(proxies.id, parsed.data), eq(proxies.licenseId, session.licenseId)));
+
+  revalidatePath(`/${session.licenseId}/proxy-management/add-proxy`);
+  revalidatePath(`/${session.licenseId}/overview`);
+  return { success: "Proxy deleted." };
 }

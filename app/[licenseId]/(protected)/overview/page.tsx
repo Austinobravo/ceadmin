@@ -97,7 +97,8 @@ export default async function OverviewPage() {
 
   return (
     <OverviewClient
-      initialRows={rows.length > 0 ? rows : dummyRows}
+      // initialRows={rows.length > 0 ? rows : dummyRows}
+      initialRows={dummyRows}
       licenseId={session.licenseId}
       expiresAt={license?.expiresAt ?? new Date().toISOString()}
       stats={{

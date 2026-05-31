@@ -1,5 +1,5 @@
 import { ipLog, tokens } from "@/lib/schema";
-import { securityDb } from "../../lib/db";
+import { securityDb } from "@/lib/db";
 import { ShieldAlert, Activity, Cookie } from "lucide-react";
 import { desc } from "drizzle-orm";
 import { requireSession } from "@/lib/auth";

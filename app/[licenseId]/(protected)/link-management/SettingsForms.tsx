@@ -47,6 +47,23 @@ export function TelegramForm({ initial }: { initial: { chatId: string; botToken:
     </form>
   );
 }
+export function LandingForm({ initial }: { initial: { url: string } }) {
+  const [state, action, pending] = useActionState<ActionState, FormData>(saveLandingPage, {});
+  return (
+    <form action={action} className="rounded-lg border border-[var(--border)] bg-[var(--panel)] p-6">
+      <label className="block text-sm font-medium text-[var(--text)]">
+        Landing Page URL
+        <input name="url" type="url" defaultValue={initial.url} className="form-input" placeholder="https://example.com/page" />
+      </label>
+      {/* <label className="mt-5 block text-sm font-medium text-[var(--text)]">
+        Bot Token
+        <input name="botToken" defaultValue={initial.botToken} className="form-input" placeholder="123456789:ABC..." />
+      </label> */}
+      <Status state={state} />
+      <Submit pending={pending} />
+    </form>
+  );
+}
 
 export function LandingPageForm({
   initial,
@@ -118,8 +135,9 @@ export function OptionForm({
     <form action={action} className="rounded-lg border border-[var(--border)] bg-[var(--panel)] p-6">
       <label className="block text-sm font-medium text-[var(--text)]">
         Select an option
-        <select name="option" defaultValue={initial} className="form-input">
-          <option value="enabled">Enabled</option>
+        <select name="option" defaultValue={initial} className="form-input" required>
+          <option value="auto">Auto</option>
+          <option value="manual">Manual</option>
           <option value="disabled">Disabled</option>
         </select>
       </label>

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ensureLicense, getSession } from "@/lib/auth";
 import { AuthForm } from "./AuthForm";
 
@@ -9,12 +9,12 @@ export default async function LicenseAuthPage(props: PageProps<"/[licenseId]">) 
   const normalized = licenseId.trim();
 
   if (!/^admin[a-zA-Z0-9]{16,80}$/.test(normalized)) {
-    redirect("/");
+    notFound();
   }
 
   const session = await getSession();
   if (session?.licenseId === normalized) {
-    redirect("/overview");
+    redirect(`/${normalized}/overview`);
   }
 
   const license = await ensureLicense(normalized);

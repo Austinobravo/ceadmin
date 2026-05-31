@@ -7,6 +7,7 @@ import {
   Globe2,
   KeyRound,
   LayoutDashboard,
+  LifeBuoy,
   Menu,
   Network,
   Plus,
@@ -17,7 +18,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { LogoutButton } from "./LogoutButton";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -47,11 +48,12 @@ const navItems = [
     children: [
       { name: "Telegram Notification", href: "/link-management/telegram-notification", icon: Send },
       { name: "Landing Page", href: "/link-management/landing-page", icon: Globe2 },
-      { name: "Set Default Service", href: "/link-management/default-service", icon: Settings },
-      { name: "Use as Single Link", href: "/link-management/single-link", icon: SlidersHorizontal },
+      // { name: "Set Default Service", href: "/link-management/default-service", icon: Settings },
+      // { name: "Use as Single Link", href: "/link-management/single-link", icon: SlidersHorizontal },
       { name: "Use Captcha", href: "/link-management/captcha", icon: ShieldAlert },
     ],
   },
+  { name: "Support", href: "/support", icon: LifeBuoy },
   // { name: "Settings", href: "/settings", icon: Settings },
   // { name: "Security", href: "/security", icon: ShieldAlert },
 ];
@@ -59,14 +61,28 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const segments = pathname.split("/").filter(Boolean);
+  const licenseId = segments[0] ?? "";
+  const scopedPathname = `/${segments.slice(1).join("/")}`;
+
+  // const fetchLastLicense = async () => {
+  //   const licenseId = "await getLastLicenseId()"
+  //   setLicenseId(licenseId || "");
+    
+  // }
+
+
+  // React.useEffect(() => {
+  //   fetchLastLicense();
+  // }, []);
 
   const expandedGroups = useMemo(
     () =>
       navItems.reduce<Record<string, boolean>>((acc, item) => {
-        if (item.children) acc[item.name] = pathname.startsWith(item.href);
+        if (item.children) acc[item.name] = scopedPathname.startsWith(item.href);
         return acc;
       }, {}),
-    [pathname],
+    [scopedPathname],
   );
 
   const [manualExpanded, setManualExpanded] = useState<Record<string, boolean>>({});
@@ -89,7 +105,7 @@ export function Sidebar() {
           {navItems.map((item) => {
             const Icon = item.icon;
             const hasChildren = Boolean(item.children?.length);
-            const isGroupActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isGroupActive = scopedPathname === item.href || scopedPathname.startsWith(`${item.href}/`);
             const isExpanded = manualExpanded[item.name] ?? expandedGroups[item.name] ?? false;
 
             if (hasChildren) {
@@ -118,11 +134,11 @@ export function Sidebar() {
                     <ul className="ml-5 mt-1 space-y-1 border-l border-[var(--border)] pl-3">
                       {item.children?.map((child) => {
                         const ChildIcon = child.icon;
-                        const childActive = pathname === child.href;
+                        const childActive = scopedPathname === child.href;
                         return (
                           <li key={child.href}>
                             <Link
-                              href={child.href}
+                              href={`/${licenseId}${child.href}`}
                               onClick={() => setIsOpen(false)}
                               className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition ${
                                 childActive
@@ -142,11 +158,11 @@ export function Sidebar() {
               );
             }
 
-            const isActive = pathname === item.href;
+            const isActive = scopedPathname === item.href;
             return (
               <li key={item.name}>
                 <Link
-                  href={item.href}
+                  href={`/${licenseId}${item.href}`}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                     isActive

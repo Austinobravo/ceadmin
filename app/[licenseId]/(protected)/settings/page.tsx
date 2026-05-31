@@ -1,5 +1,5 @@
 import { settings } from "@/lib/schema";
-import { configDb } from "../../lib/db";
+import { configDb } from "@/lib/db";
 import { SettingsForm } from "./SettingsForm";
 import { Settings } from "lucide-react";
 import { inArray } from "drizzle-orm";

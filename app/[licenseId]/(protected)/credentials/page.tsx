@@ -1,5 +1,5 @@
 import { credentials } from "@/lib/schema";
-import { mainDb } from "../../lib/db";
+import { mainDb } from "@/lib/db";
 import { KeyRound, Mail, MapPin } from "lucide-react";
 import { desc } from "drizzle-orm";
 import { requireSession } from "@/lib/auth";

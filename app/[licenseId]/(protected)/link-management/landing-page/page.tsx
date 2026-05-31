@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { requireSession } from "@/lib/auth";
 import { domains, landingPages } from "@/lib/schema/main.schema";
-import { LandingPageForm } from "../SettingsForms";
+import { LandingForm } from "../SettingsForms";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +20,7 @@ export default async function LandingPagePage() {
           <p className="text-sm font-medium text-cyan-300">Link Management</p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--text)]">Landing Page</h1>
         </div>
-        <LandingPageForm initial={{ service: row?.service ?? "Microsoft 365", domainId: row?.domainId ?? null }} domains={domainRows} />
+        <LandingForm initial={{ url: row?.service ?? "" }} />
       </div>
     </div>
   );

