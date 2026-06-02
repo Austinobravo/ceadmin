@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   Activity,
   ChevronLeft,
@@ -14,6 +14,7 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import { ActionState, deleteLog } from "./actions";
 
 export type LogRow = {
   id: string;
@@ -26,6 +27,7 @@ export type LogRow = {
   firstSeen: string;
   lastSeen: string;
   fullTimestamp: string;
+  cookie?: any
 };
 
 export type DashboardStats = {
@@ -86,10 +88,18 @@ export function OverviewClient({
     setPage(1);
   }, [query, pageSize]);
 
+  const [deleteState, setDeleteState] = useState<ActionState>({});
+
+  const [isDeleting, startDeleteTransition] = useTransition();
+
   function confirmDelete() {
     if (!deleteTarget) return;
-    setRows((current) => current.filter((item) => item.id !== deleteTarget.id));
-    setDeleteTarget(null);
+    startDeleteTransition(async () => {
+      const result = await deleteLog(deleteTarget.fullSessionId);
+      setDeleteState(result);
+      setRows((current) => current.filter((item) => item.fullSessionId !== deleteTarget.fullSessionId));
+      setDeleteTarget(null)
+    });
   }
 
   return (
@@ -184,6 +194,8 @@ export function OverviewClient({
               </select>
             </label>
           </div>
+        {/* {deleteState.error ? <p className="px-5 pt-4 text-sm text-rose-300">{deleteState.error}</p> : null}
+        {deleteState.success ? <p className="px-5 pt-4 text-sm text-emerald-400">{deleteState.success}</p> : null} */}
 
           <div className="overflow-x-auto">
             <table className="min-w-[920px] w-full text-left text-sm">
@@ -223,7 +235,7 @@ export function OverviewClient({
                         <IconButton label={`View ${row.id}`} title="View details" onClick={() => setSelected(row)}>
                           <Eye className="h-4 w-4" />
                         </IconButton>
-                        <IconButton label={`Download ${row.id}`} title="Download JSON" onClick={() => downloadJson(`${row.email}.json`, row)}>
+                        <IconButton label={`Download ${row.id}`} title="Download JSON" onClick={() => downloadJson(`${row.email}.json`, row.cookie ?? row)}>
                           <Download className="h-4 w-4" />
                         </IconButton>
                         <button
@@ -285,6 +297,7 @@ export function OverviewClient({
           row={deleteTarget}
           onCancel={() => setDeleteTarget(null)}
           onConfirm={confirmDelete}
+          pending={isDeleting}
         />
       ) : null}
     </div>
@@ -342,10 +355,12 @@ function ConfirmDeleteDialog({
   row,
   onCancel,
   onConfirm,
+  pending
 }: {
   row: LogRow;
   onCancel: () => void;
   onConfirm: () => void;
+  pending:boolean
 }) {
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
@@ -361,8 +376,8 @@ function ConfirmDeleteDialog({
           <button type="button" onClick={onCancel} className="rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm font-medium text-[var(--text)]">
             Cancel
           </button>
-          <button type="button" onClick={onConfirm} className="rounded-lg bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white">
-            Delete
+          <button type="button" onClick={onConfirm} disabled={pending} className="rounded-lg bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">
+            {pending ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

