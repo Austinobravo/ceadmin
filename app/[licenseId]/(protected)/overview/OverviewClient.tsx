@@ -342,7 +342,7 @@ function DetailsDialog({ row, onClose }: { row: LogRow; onClose: () => void }) {
           {Object.entries(row).map(([key, value]) => (
             <div key={key} className="rounded-lg bg-[var(--surface)] p-3">
               <dt className="text-xs uppercase text-[var(--muted)]">{key}</dt>
-              <dd className="mt-1 break-all text-sm text-[var(--text)]">{value}</dd>
+              <dd className="mt-1 break-all text-sm text-[var(--text)] line-clamp-6">{value}</dd>
             </div>
           ))}
         </dl>
