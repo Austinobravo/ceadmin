@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { ensureLicense, getSession } from "@/lib/auth";
 import { AuthForm } from "./AuthForm";
+import { validateAdminLicense } from "@/lib/admin-license";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,8 @@ export default async function LicenseAuthPage(props: PageProps<"/[licenseId]">) 
   if (!/^admin[a-zA-Z0-9]{16,80}$/.test(normalized)) {
     notFound();
   }
+
+  validateAdminLicense(normalized);
 
   const session = await getSession();
   if (session?.licenseId === normalized) {

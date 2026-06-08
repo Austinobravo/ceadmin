@@ -4,6 +4,30 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
+export const adminLoginAttempts = sqliteTable("admin_login_attempts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  licenseId: text("license_id")
+    .notNull()
+    .references(() => licenses.licenseId),
+
+  ipAddress: text("ip_address").notNull(),
+
+  failedAttempts: integer("failed_attempts")
+    .notNull()
+    .default(0),
+
+  lockedUntil: text("locked_until"),
+
+  lastAttemptAt: text("last_attempt_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const clients = sqliteTable("clients", {
   sessionId: text("sessionId").primaryKey(),
   client_ip: text("client_ip").notNull(),

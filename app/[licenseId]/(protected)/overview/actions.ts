@@ -38,14 +38,14 @@ export async function deleteLog(sessionId: string) {
     revalidatePath(`/${session.licenseId}/overview`);
 
     return {
-      success: "Log deleted successfully",
+      success: true,
       message: "Log deleted successfully",
     };
   } catch (error) {
     console.error(error);
 
     return {
-      error: "Failed to delete log",
+      error: true,
       message: "Failed to delete log",
     };
   }

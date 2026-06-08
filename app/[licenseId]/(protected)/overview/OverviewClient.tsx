@@ -96,7 +96,7 @@ export function OverviewClient({
     if (!deleteTarget) return;
     startDeleteTransition(async () => {
       const result = await deleteLog(deleteTarget.fullSessionId);
-      setDeleteState(result);
+      setDeleteState(result.message ? { message: result.message } : {}  );
       setRows((current) => current.filter((item) => item.fullSessionId !== deleteTarget.fullSessionId));
       setDeleteTarget(null)
     });

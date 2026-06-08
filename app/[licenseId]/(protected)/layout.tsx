@@ -4,6 +4,7 @@ import { Sidebar } from "@/app/components/Sidebar";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 import { LogoutButton } from "@/app/components/LogoutButton";
 import { TourGuide } from "@/app/components/TourGuide";
+import { validateAdminLicense } from "@/lib/admin-license";
 
 export default async function ProtectedLayout({
   children,
@@ -18,6 +19,8 @@ export default async function ProtectedLayout({
   if (!/^admin[a-zA-Z0-9]{16,80}$/.test(normalized)) {
     notFound();
   }
+
+  validateAdminLicense(normalized);
 
   const license = await getLicenseForAuth(normalized);
   if (!license) {
