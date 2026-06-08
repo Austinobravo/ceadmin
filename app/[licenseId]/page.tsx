@@ -19,6 +19,7 @@ export default async function LicenseAuthPage(props: PageProps<"/[licenseId]">) 
   if (session?.licenseId === normalized) {
     redirect(`/${normalized}/overview`);
   }
+  
 
   const license = await ensureLicense(normalized);
 

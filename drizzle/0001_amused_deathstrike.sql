@@ -1,0 +1,1 @@
+ALTER TABLE `admin_login_attempts` ADD `updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL;

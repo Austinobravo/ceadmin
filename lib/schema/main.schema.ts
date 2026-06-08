@@ -26,6 +26,9 @@ export const adminLoginAttempts = sqliteTable("admin_login_attempts", {
   createdAt: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const clients = sqliteTable("clients", {
